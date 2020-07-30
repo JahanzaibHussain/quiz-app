@@ -1,23 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
 import './App.css';
+import Question from './components/Question';
+
+import { getQuiz } from './services/getQuiz'
+import { questionType, quizType } from './types/questionTypes'
 
 function App() {
+  
+  const [quiz, setQuiz] = useState<quizType[]> ([])  
+
+  useEffect(() => {
+      async function getData(){
+        const res: quizType[]  = await getQuiz(5, "easy");
+        setQuiz(res)
+      }
+      getData();
+  }, [])
+  
+  const handelClick = ()=>{
+    (!quiz.length) ? console.log("Loading") : console.log(quiz)
+  }
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+          Quiz App
+          <Question />
+          <button onClick={()=> handelClick()}>Click</button>
       </header>
     </div>
   );
